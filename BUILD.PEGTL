@@ -1,0 +1,47 @@
+load("@//:generate_test.bzl", "generate_test")
+
+cc_library(
+    name = "pegtl",
+    hdrs = [
+        "include/tao/pegtl.hpp"
+    ] + glob(["include/tao/pegtl/*.hpp", "include/tao/pegtl/analysis/*.hpp", "include/tao/pegtl/internal/*.hpp"]),
+    includes = ["include/tao", "include/tao/pegtl"]
+)
+
+cc_library(
+    name = "pegtl_contrib",
+    hdrs = glob(["include/tao/pegtl/contrib/*.hpp"]),
+    includes = ["include"],
+    deps = [":pegtl"],
+)
+
+cc_library(
+    name = "pegtl_contrib_icu",
+    hdrs = glob(["include/tao/pegtl/contrib/icu/*.hpp"]),
+    includes = ["include"],
+    deps = [":pegtl"],
+)
+
+cc_library(
+    name = "unit_test_hdrs",
+    hdrs = glob(["src/test/pegtl/*.hpp"]),
+    includes = ["src/test/pegtl", "include"],
+)
+
+
+filegroup(
+    name = "unit_test_data",
+    srcs = glob(["src/test/pegtl/data/*.json"]),
+)
+
+DISABLED_TESTS = [
+    "src/test/pegtl/contrib_json.cpp",
+    "src/test/pegtl/file_cstream.cpp",
+    "src/test/pegtl/file_file.cpp",
+    "src/test/pegtl/file_istream.cpp",
+    "src/test/pegtl/file_mmap.cpp",
+    "src/test/pegtl/file_read.cpp",
+    "src/test/pegtl/internal_file_opener.cpp",
+]
+
+[generate_test(src) for src in glob(include = ["src/test/pegtl/*.cpp"], exclude = DISABLED_TESTS)]
