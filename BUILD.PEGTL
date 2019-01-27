@@ -1,11 +1,12 @@
-load("@//:generate_test.bzl", "generate_test")
+load("@bazel_PEGTL//:generate_test.bzl", "generate_test")
 
 cc_library(
     name = "pegtl",
     hdrs = [
         "include/tao/pegtl.hpp"
     ] + glob(["include/tao/pegtl/*.hpp", "include/tao/pegtl/analysis/*.hpp", "include/tao/pegtl/internal/*.hpp"]),
-    includes = ["include/tao", "include/tao/pegtl"]
+    includes = ["include/tao", "include/tao/pegtl"],
+    visibility = ["//visibility:public"],
 )
 
 cc_library(
@@ -13,6 +14,7 @@ cc_library(
     hdrs = glob(["include/tao/pegtl/contrib/*.hpp"]),
     includes = ["include/pegtl/contrib"],
     deps = [":pegtl"],
+    visibility = ["//visibility:public"],
 )
 
 cc_library(
@@ -20,6 +22,7 @@ cc_library(
     hdrs = glob(["include/tao/pegtl/contrib/icu/*.hpp"]),
     includes = ["include/pegtl/contrib/icu"],
     deps = [":pegtl", ":pegtl_contrib"],
+    visibility = ["//visibility:public"],
 )
 
 cc_library(
